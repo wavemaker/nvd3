@@ -272,7 +272,7 @@ nv.models.tooltip = function() {
                    .attr("id", id)
                    .style("top", 0).style("left", 0)
                    .style('opacity', 0)
-                   .style('position', 'absolute')
+                   .style('position', 'fixed')
                    .selectAll("div, table, td, tr").classed(nvPointerEventsClass, true)
                    .classed(nvPointerEventsClass, true);
 
