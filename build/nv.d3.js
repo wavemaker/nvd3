@@ -1,4 +1,4 @@
-/* nvd3 version 1.0.2 (https://github.com/novus/nvd3) 2020-04-14 */
+/* nvd3 version 1.0.2 (https://github.com/wavemaker/nvd3) 2020-06-01 */
 (function(){
 
 // set up main nv object
