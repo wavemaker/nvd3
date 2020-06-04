@@ -1,4 +1,4 @@
-/* nvd3 version 1.0.2 (https://github.com/wavemaker/nvd3) 2020-06-01 */
+/* nvd3 version 1.0.0 (https://github.com/wavemaker/nvd3) 2020-06-04 */
 (function(){
 
 // set up main nv object
@@ -18682,6 +18682,6 @@ nv.models.sunburstChart = function() {
 
 };
 
-nv.version = "1.0.2";
+nv.version = "1.0.0";
 })();
 //# sourceMappingURL=nv.d3.js.map
