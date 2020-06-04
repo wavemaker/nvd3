@@ -1,6 +1,6 @@
 {
   "name": "@wavemaker.com/nvd3",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A reusable charting library written in d3.js",
   "url": "https://github.com/wavemaker/nvd3",
   "main": "build/nv.d3.min.js",
@@ -10,7 +10,9 @@
   },
   "files": [
     "build/nv.d3.min.js",
-    "build/nv.d3.min.css"
+    "build/nv.d3.js",
+    "build/nv.d3.min.css",
+    "build/nv.d3.css"
   ],
   "repository": {
     "type": "git",
