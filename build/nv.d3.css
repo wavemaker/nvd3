@@ -1,4 +1,4 @@
-/* nvd3 version 1.0.0 (https://github.com/wavemaker/nvd3) 2020-06-04 */
+/* nvd3 version 1.8.6-dev (https://github.com/novus/nvd3) 2020-03-14 */
 .nvd3 .nv-axis {
     pointer-events:none;
     opacity: 1;
@@ -47,6 +47,8 @@
 .nvd3 .nv-bars rect {
     fill-opacity: .75;
 
+    -webkit-transition: fill-opacity 250ms linear;
+
     transition: fill-opacity 250ms linear;
 }
 
@@ -71,6 +73,8 @@
 .nvd3 .nv-discretebar .nv-groups rect {
     stroke-opacity: 0;
 
+    -webkit-transition: fill-opacity 250ms linear;
+
     transition: fill-opacity 250ms linear;
 }
 
@@ -90,23 +94,23 @@
 
 /* boxplot CSS */
 .nvd3 .nv-boxplot circle {
-  fill-opacity: 0.5;
+    fill-opacity: 0.5;
 }
 
 .nvd3 .nv-boxplot circle:hover {
-  fill-opacity: 1;
+    fill-opacity: 1;
 }
 
 .nvd3 .nv-boxplot rect:hover {
-  fill-opacity: 1;
+    fill-opacity: 1;
 }
 
 .nvd3 line.nv-boxplot-median {
-  stroke: black;
+    stroke: black;
 }
 
 .nv-boxplot-tick:hover {
-  stroke-width: 2.5px;
+    stroke-width: 2.5px;
 }
 /* bullet */
 .nvd3.nv-bullet { font: 10px sans-serif; }
@@ -150,6 +154,7 @@
 }
 
 .with-transitions .nv-candlestickBar .nv-ticks .nv-tick {
+    -webkit-transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
     transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
 }
 
@@ -222,6 +227,7 @@
 
 
 .with-transitions .nvd3 .nv-groups .nv-point {
+    -webkit-transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
     transition: stroke-width 250ms linear, stroke-opacity 250ms linear;
 }
 
@@ -254,8 +260,9 @@
 */
 svg.nvd3-svg {
     -webkit-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     display: block;
     width:100%;
     height:100%;
@@ -265,6 +272,7 @@ svg.nvd3-svg {
   Box shadow and border radius styling
 */
 .nvtooltip.with-3d-shadow, .with-3d-shadow .nvtooltip {
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
     box-shadow: 0 5px 10px rgba(0,0,0,.2);
     border-radius: 5px;
 }
@@ -293,12 +301,12 @@ svg.nvd3-svg {
 *  Brush
 */
 
-.nv-brush .extent {
+.nv-brush .selection {
     fill-opacity: .125;
     shape-rendering: crispEdges;
 }
 
-.nv-brush .resize path {
+.nv-brush .handle path {
     fill: #eee;
     stroke: #666;
 }
@@ -317,7 +325,7 @@ svg.nvd3-svg {
 }
 
 /* focus */
-.nvd3 .nv-brush .extent {
+.nvd3 .nv-brush .selection {
     fill-opacity: 0 !important;
 }
 
@@ -368,7 +376,7 @@ svg.nvd3-svg {
     stroke-opacity: .7;
 }
 
-.nvd3 .nv-parallelCoordinates-brush .extent {
+.nvd3 .nv-parallelCoordinates-brush .selection {
     fill: #fff;
     fill-opacity: .6;
     stroke: gray;
@@ -377,20 +385,21 @@ svg.nvd3-svg {
 
 .nvd3 .nv-parallelCoordinates .hover  {
     fill-opacity: 1;
-	stroke-width: 3px;
+    stroke-width: 3px;
 }
 
 
 .nvd3 .missingValuesline line {
-  fill: none;
-  stroke: black;
-  stroke-width: 1;
-  stroke-opacity: 1;
-  stroke-dasharray: 5, 5;
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+    stroke-opacity: 1;
+    stroke-dasharray: 5, 5;
 }
 
 .nvd3.nv-pie path {
     stroke-opacity: 0;
+    -webkit-transition: fill-opacity 250ms linear, stroke-width 250ms linear, stroke-opacity 250ms linear;
     transition: fill-opacity 250ms linear, stroke-width 250ms linear, stroke-opacity 250ms linear;
 }
 
@@ -498,6 +507,7 @@ svg.nvd3-svg {
 .nvd3.nv-stackedarea path.nv-area {
     fill-opacity: .7;
     stroke-opacity: 0;
+    -webkit-transition: fill-opacity 250ms linear, stroke-opacity 250ms linear;
     transition: fill-opacity 250ms linear, stroke-opacity 250ms linear;
 }
 
@@ -529,9 +539,11 @@ svg.nvd3-svg {
 
     -webkit-user-select: none;
 
-        -ms-user-select: none;
+    -moz-user-select: none;
 
-            user-select: none;
+    -ms-user-select: none;
+
+    user-select: none;
 }
 
 .nvtooltip {
@@ -544,7 +556,10 @@ svg.nvd3-svg {
     putting a "with-transitions" class on the container div.
 */
 .nvtooltip.with-transitions, .with-transitions .nvtooltip {
+    -webkit-transition: opacity 50ms linear;
     transition: opacity 50ms linear;
+
+    -webkit-transition-delay: 200ms;
 
     transition-delay: 200ms;
 }
