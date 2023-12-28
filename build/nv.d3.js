@@ -19132,6 +19132,6 @@ Options for chart:
 
     };
 
-    nv.version = "1.8.6-dev";
+    nv.version = "1.8.6";
 })();
 //# sourceMappingURL=nv.d3.js.map
