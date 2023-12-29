@@ -1809,11 +1809,13 @@ Check equality of 2 array
                 var axislabelAppend;
                 var xLabelMargin;
                 var axisMaxMin;
+                var axisMax;
                 var w;
                 switch (orientation) {
                     case 'top':
                         xLabelMargin = axisLabelDistance + 36;
                         var axislabelAppend=axisLabel.enter().append('text').attr('class', 'nv-axislabel');
+                        axislabelAppend = container.selectAll('g.nv-wrap.nv-axis').selectAll('text.nv-axislabel');
                         w = 0;
                         if (scale.range().length === 1) {
                             w = isOrdinal ? scale.range()[0] * 2 + scale.bandwidth() : 0;
@@ -1827,11 +1829,22 @@ Check equality of 2 array
                             .attr('y', -xLabelMargin)
                             .attr('x', w/2);
                         if (showMaxMin) {
-                            gEnter.selectAll('g.nv-axisMaxMin')
-                                .data(scale.domain());
-                            axisMaxMin=gEnter.enter().append('g').attr('class',function(d,i){
-                                return ['nv-axisMaxMin','nv-axisMaxMin-x',(i == 0 ? 'nv-axisMin-x':'nv-axisMax-x')].join(' ')
-                            }).append('text');
+                            axisMaxMin = gEnter
+                                .enter()
+                                .append("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                )
+                                .merge(gEnter);
+
+                            axisMaxMin = container.selectAll("g.nv-wrap.nv-axis").selectAll("g.nv-axisMaxMin")
+                                .data(scale.domain())
+                                .join("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                );
+
+                            axisMaxMin.append('text');
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -1887,6 +1900,7 @@ Check equality of 2 array
                             }
                         }
                         axislabelAppend=axisLabel.enter().append('text').attr('class', 'nv-axislabel');
+                        axislabelAppend = container.selectAll('g.nv-wrap.nv-axis').selectAll('text.nv-axislabel');
                         w = 0;
                         if (scale.range().length === 1) {
                             w = isOrdinal ? scale.range()[0] * 2 + scale.bandwidth() : 0;
@@ -1901,12 +1915,14 @@ Check equality of 2 array
                             .attr('x', w/2);
                         if (showMaxMin) {
                             //if (showMaxMin && !isOrdinal) {
-                            gEnter.selectAll('g.nv-axisMaxMin')
-                                //.data(scale.domain())
-                                .data([scale.domain()[0], scale.domain()[scale.domain().length - 1]]);
                             axisMaxMin=gEnter.enter().append('g').attr('class',function(d,i){
                                 return ['nv-axisMaxMin','nv-axisMaxMin-x',(i == 0 ? 'nv-axisMin-x':'nv-axisMax-x')].join(' ')
-                            }).append('text');
+                            })
+
+                            axisMax = container.selectAll('g.nv-wrap.nv-axis').selectAll('g.nv-axisMaxMin')
+                                .data([scale.domain()[0], scale.domain()[scale.domain().length - 1]]);
+                            axisMaxMin = axisMax.merge(axisMaxMin)
+                            axisMaxMin.append('text');
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -1931,6 +1947,7 @@ Check equality of 2 array
                         break;
                     case 'right':
                         axislabelAppend=axisLabel.enter().append('text').attr('class', 'nv-axislabel');
+                        axislabelAppend = container.selectAll('g.nv-wrap.nv-axis').selectAll('text.nv-axislabel');
                         axislabelAppend
                             .style('text-anchor', rotateYLabel ? 'middle' : 'begin')
                             .attr('transform', rotateYLabel ? 'rotate(90)' : '')
@@ -1941,7 +1958,11 @@ Check equality of 2 array
                                 .data(scale.domain());
                             axisMaxMin=gEnter.enter().append('g').attr('class',function(d,i){
                                 return ['nv-axisMaxMin','nv-axisMaxMin-y',(i == 0 ? 'nv-axisMin-y':'nv-axisMax-y')].join(' ')
-                            }).append('text')
+                            })
+                            axisMax = container.selectAll('g.nv-wrap.nv-axis').selectAll('g.nv-axisMaxMin')
+                                .data(scale.domain());
+                            axisMaxMin = axisMax.merge(axisMaxMin);
+                            axisMaxMin.append('text')
                                 .style('opacity', 1);
                             axisMaxMin.exit().remove();
                             axisMaxMin
@@ -1976,17 +1997,29 @@ Check equality of 2 array
                      });
                      */
                         axislabelAppend=axisLabel.enter().append('text').attr('class', 'nv-axislabel');
+                        axislabelAppend = container.selectAll('g.nv-wrap.nv-axis').selectAll('text.nv-axislabel');
                         axislabelAppend
                             .style('text-anchor', rotateYLabel ? 'middle' : 'end')
                             .attr('transform', rotateYLabel ? 'rotate(-90)' : '')
                             .attr('y', rotateYLabel ? (-Math.max(margin.left, width) + 25 - (axisLabelDistance || 0)) : -10)
                             .attr('x', rotateYLabel ? (-d3.max(scale.range()) / 2) : -axis.tickPadding());
                         if (showMaxMin) {
-                            gEnter.selectAll('g.nv-axisMaxMin')
-                                .data(scale.domain());
-                            axisMaxMin=gEnter.enter().append('g').attr('class',function(d,i){
-                                return ['nv-axisMaxMin','nv-axisMaxMin-y',(i == 0 ? 'nv-axisMin-y':'nv-axisMax-y')].join(' ')
-                            }).append('text')
+                            axisMaxMin = gEnter
+                                .enter()
+                                .append("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                )
+                                .merge(gEnter);
+
+                            axisMaxMin = container.selectAll("g.nv-wrap.nv-axis").selectAll("g.nv-axisMaxMin")
+                                .data(scale.domain())
+                                .join("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                );
+                            axisMaxMin
+                                .append('text')
                                 .style('opacity', 1);
                             axisMaxMin.exit().remove();
                             axisMaxMin
@@ -10061,12 +10094,15 @@ Options for chart:
                 if (!showLegend) {
                     legendWrapAppend.selectAll('*').remove();
                 } else {
+                    legend.width(availableWidth);
 
-
+                    legendWrapAppend
+                        .datum(data)
+                        .call(legend);
                     if (legendPosition === 'bottom') {
                         margin.bottom = xAxis.height() + legend.height();
                         availableHeight = nv.utils.availableHeight(height, container, margin);
-                        wrap.select('.nv-legendWrap')
+                        legendWrapAppend
                             .attr('transform', 'translate(0,' + (availableHeight + xAxis.height())  +')');
                     } else if (legendPosition === 'top') {
                         if (!marginTop && legend.height() !== margin.top) {
@@ -10074,14 +10110,10 @@ Options for chart:
                             availableHeight = nv.utils.availableHeight(height, container, margin) - (focusEnable ? focus.height() : 0);
                         }
 
-                        wrap.select('.nv-legendWrap')
+                        legendWrapAppend
                             .attr('transform', 'translate(0,' + (-margin.top) +')');
                     }
-                    legend.width(availableWidth);
 
-                    legendWrapAppend
-                        .datum(data)
-                        .call(legend);
                 }
 
                 if (rightAlignYAxis) {
@@ -16370,7 +16402,8 @@ Options for chart:
                         var mouseEventCallback = function(el, event, d, mDispatch) {
                             if (needsUpdate) return 0;
                             setCoordinates(event.pageX, event.pageY);
-                            var series = data[d.seriesIndex];
+                            var eventEleIndex = d.seriesIndex || d.series;
+                            var series = data[eventEleIndex];
                             if (series === undefined) return;
                             var point  = series.values[d.point];
                             point['color'] = color(series, d.seriesIndex);
@@ -16394,7 +16427,7 @@ Options for chart:
                                 series: series,
                                 pos: pos,
                                 relativePos: [x(getX(point, d.point)) + margin.left, y(getY(point, d.point)) + margin.top],
-                                seriesIndex: d.seriesIndex,
+                                seriesIndex: d.seriesIndex || d.series,
                                 pointIndex: d.point,
                                 event: d3.event,
                                 element: el
@@ -16891,6 +16924,9 @@ Options for chart:
                 // Setup Scales
                 x = scatter.xScale();
                 y = scatter.yScale();
+                data.forEach(function(aseries, i) {
+                    aseries.seriesIndex = i;
+                });
 
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-scatterChart').data([data]);
@@ -16926,7 +16962,7 @@ Options for chart:
                     var legendWidth = availableWidth;
                     legend.width(legendWidth);
 
-                    var legendCall=legendWrapAppend
+                    legendWrapAppend
                         .datum(data)
                         .call(legend);
 
@@ -16935,7 +16971,7 @@ Options for chart:
                         availableHeight = nv.utils.availableHeight(height, container, margin);
                     }
 
-                    legendCall
+                    legendWrapAppend
                         .attr('transform', 'translate(0' + ',' + (-margin.top) +')');
                 }
 
@@ -17746,7 +17782,7 @@ Options for chart:
                             seriesIndex: d.seriesIndex
                         });
                     });
-
+                pathEnter = pathEnter.merge(path);
                 pathEnter.style('fill', function(d,i){
                     return d.color || color(d, d.seriesIndex)
                 })
@@ -17755,7 +17791,7 @@ Options for chart:
                     .attr('d', function(d,i){
                         return area(d.values, d.seriesIndex);
                     })
-                //pathEnter.merge(path);
+
 
                 //============================================================
                 // Event Handling/Dispatching (in chart's scope)
@@ -18041,6 +18077,7 @@ Options for chart:
                 x = stacked.xScale();
                 y = stacked.yScale();
 
+
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-stackedAreaChart').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-stackedAreaChart');
@@ -18053,7 +18090,6 @@ Options for chart:
                 var controlsWrapAppend=gEnter.append('g').attr('class', 'nv-controlsWrap');
                 controlsWrapAppend = container.selectAll('g.nv-wrap.nv-stackedAreaChart').select('.nv-controlsWrap');
                 var focusEnter = gEnter.append('g').attr('class', 'nv-focus');
-                focusEnter = container.selectAll('g.nv-wrap.nv-stackedAreaChart').select('.nv-focus');
                 var rectAppend=focusEnter.append('g').attr('class', 'nv-background').append('rect');
                 var xAxisAppend=focusEnter.append('g').attr('class', 'nv-x nv-axis');
                 xAxisAppend = container.selectAll('g.nv-wrap.nv-stackedAreaChart').select('.nv-x');
