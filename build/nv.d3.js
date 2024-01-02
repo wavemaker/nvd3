@@ -1963,7 +1963,7 @@ Check equality of 2 array
                                 .data(scale.domain());
                             axisMaxMin = axisMax.merge(axisMaxMin);
                             axisMaxMin.append('text')
-                                .style('opacity', 1);
+                                .style('opacity', 0);
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -2020,7 +2020,7 @@ Check equality of 2 array
                                 );
                             axisMaxMin
                                 .append('text')
-                                .style('opacity', 1);
+                                .style('opacity', 0);
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -2056,7 +2056,7 @@ Check equality of 2 array
                                 if (d > 1e-10 || d < -1e-10) // accounts for minor floating point errors... though could be problematic if the scale is EXTREMELY SMALL
                                     d3.select(this).attr('opacity', 0);
 
-                                d3.select(this).select('text').attr('opacity', 1); // Don't remove the ZERO line!!
+                                d3.select(this).select('text').attr('opacity', 0); // Don't remove the ZERO line!!
                             }
                         });
 
@@ -11400,10 +11400,11 @@ Options for chart:
 
                 var groups = container.select('.nv-groups').selectAll('.nv-group')
                     .data(function(d) { return d }, function(d,i) { return i });
+                groups.exit().remove();
                 var gAppend=groups.enter().append('g')
                     .style('stroke-opacity', 1e-6)
                     .style('fill-opacity', 1e-6);
-
+                gAppend = groups.merge(gAppend);
                 var exitTransition = renderWatch
                     .transition(gAppend.exit().selectAll('rect.nv-bar'), 'multibarExit', Math.min(100, duration))
                     .attr('y', function(d, i, j) {
@@ -12357,7 +12358,7 @@ Options for chart:
                 var groupAppend = groupAll.enter().append('g')
                     .style('stroke-opacity', 1e-6)
                     .style('fill-opacity', 1e-6);
-
+                groupAll.exit().remove();
                 var groups = groupAll.merge(groupAppend);
 
                 groups.exit().watchTransition(renderWatch, 'multibarhorizontal: exit groups')
@@ -12444,9 +12445,9 @@ Options for chart:
                     });
 
                 if (getYerr(data[0],0)) {
-                    var polylineAppend=barsEnter.append('polyline');
+                    barsEnter.append('polyline');
 
-                    polylineAppend
+                    bars.select('polyline')
                         .attr('fill', 'none')
                         .attr('points', function(d,i) {
                             var xerr = getYerr(d,i)
@@ -12462,10 +12463,10 @@ Options for chart:
                         });
                 }
 
-                var textAppend=barsEnter.append('text');
+                barsEnter.append('text');
 
                 if (showValues && !stacked) {
-                    textAppend
+                    bars.select('text')
                         .attr('text-anchor', function(d,i) { return getY(d,i) < 0 ? 'end' : 'start' })
                         .attr('y', x.bandwidth() / (data.length * 2))
                         .attr('dy', '.32em')
@@ -12482,12 +12483,12 @@ Options for chart:
                         .select('text')
                         .attr('x', function(d,i) { return getY(d,i) < 0 ? -4 : y(getY(d,i)) - y(0) + 4 })
                 } else {
-                    textAppend.text('');
+                    bars.selectAll('text').text('');
                 }
 
                 if (showBarLabels && !stacked) {
-                    var barLabelAppend=barsEnter.append('text').classed('nv-bar-label',true);
-                    barLabelAppend
+                    barsEnter.append('text').classed('nv-bar-label',true);
+                    bars.select('text.nv-bar-label')
                         .attr('text-anchor', function(d,i) { return getY(d,i) < 0 ? 'start' : 'end' })
                         .attr('y', x.bandwidth() / (data.length * 2))
                         .attr('dy', '.32em')
@@ -12742,6 +12743,7 @@ Options for chart:
                 x = multibar.xScale();
                 y = multibar.yScale().clamp(true);
 
+
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-multiBarHorizontalChart').data([data]);
                 var wrapEnter=wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-multiBarHorizontalChart');
@@ -12752,9 +12754,10 @@ Options for chart:
                 var xAxisAppend=gEnter.append('g').attr('class', 'nv-x nv-axis');
                 xAxisAppend = container.selectAll('g.nv-wrap.nv-multiBarHorizontalChart').select('.nv-x');
                 var yAxisAppend=gEnter.append('g').attr('class', 'nv-y nv-axis');
-                yAxisAppend = container.selectAll('g.nv-wrap.nv-multiBarHorizontalChart').select('.nv-y');
                 var lineAppend=yAxisAppend.append('g').attr('class', 'nv-zeroLine')
                     .append('line');
+                yAxisAppend = container.selectAll('g.nv-wrap.nv-multiBarHorizontalChart').select('.nv-y');
+
                 lineAppend = container.selectAll('g.nv-wrap.nv-multiBarHorizontalChart.nv-zeroLine').select('line');
                 var barsWrapAppend=gEnter.append('g').attr('class', 'nv-barsWrap');
                 barsWrapAppend = container.selectAll('g.nv-wrap.nv-multiBarHorizontalChart').select('.nv-barsWrap');
@@ -14817,6 +14820,7 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('.nv-wrap.nv-pie').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class','nvd3 nv-wrap nv-pie nv-chart-' + id);
+                wrap = wrap.merge(wrapEnter);
                 var gEnter = wrapEnter.append('g');
                 var g = wrap.select('g');
                 var g_pie = gEnter.append('g').attr('class', 'nv-pie');
