@@ -1,4 +1,4 @@
-/* nvd3 version 1.8.6-dev (https://github.com/novus/nvd3) 2020-03-14 */
+/* nvd3 version 1.8.6 (https://github.com/wavemaker/nvd3) 2020-03-14 */
 (function(){
 
 // set up main nv object
@@ -1797,6 +1797,7 @@ Check equality of 2 array
                     fmt = scale0.tickFormat();
                 }
                 gEnter.attr('fill', '');
+                gEnter.attr('font-size', fontSize);
                 var axisLabel = gEnter.selectAll('text.nv-axislabel')
                     .data([axisLabelText || null]);
                 axisLabel.exit().remove();

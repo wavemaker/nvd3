@@ -1,4 +1,4 @@
-/* nvd3 version 1.8.6 (https://github.com/novus/nvd3) 2020-03-14 */
+/* nvd3 version 1.8.6 (https://github.com/wavemaker/nvd3) 2020-03-14 */
 .nvd3 .nv-axis {
     pointer-events:none;
     opacity: 1;
@@ -260,7 +260,6 @@
 */
 svg.nvd3-svg {
     -webkit-user-select: none;
-    -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
     display: block;
@@ -538,8 +537,6 @@ svg.nvd3-svg {
     white-space: nowrap;
 
     -webkit-user-select: none;
-
-    -moz-user-select: none;
 
     -ms-user-select: none;
 
