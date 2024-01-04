@@ -1798,6 +1798,7 @@ Check equality of 2 array
                 }
                 gEnter.attr('fill', '');
                 gEnter.attr('font-size', fontSize);
+                gEnter.attr('font-family', '');
                 var axisLabel = gEnter.selectAll('text.nv-axislabel')
                     .data([axisLabelText || null]);
                 axisLabel.exit().remove();
@@ -1916,13 +1917,20 @@ Check equality of 2 array
                             .attr('x', w/2);
                         if (showMaxMin) {
                             //if (showMaxMin && !isOrdinal) {
-                            axisMaxMin=gEnter.enter().append('g').attr('class',function(d,i){
-                                return ['nv-axisMaxMin','nv-axisMaxMin-x',(i == 0 ? 'nv-axisMin-x':'nv-axisMax-x')].join(' ')
-                            })
+                            axisMaxMin = gEnter
+                                .enter()
+                                .append("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                )
+                                .merge(gEnter);
 
-                            axisMax = container.selectAll('g.nv-wrap.nv-axis').selectAll('g.nv-axisMaxMin')
-                                .data([scale.domain()[0], scale.domain()[scale.domain().length - 1]]);
-                            axisMaxMin = axisMax.merge(axisMaxMin)
+                            axisMaxMin = container.selectAll("g.nv-wrap.nv-axis").selectAll("g.nv-axisMaxMin")
+                                .data([scale.domain()[0], scale.domain()[scale.domain().length - 1]])
+                                .join("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                );
                             axisMaxMin.append('text');
                             axisMaxMin.exit().remove();
                             axisMaxMin
@@ -1955,14 +1963,20 @@ Check equality of 2 array
                             .attr('y', rotateYLabel ? (-Math.max(margin.right, width) + 12 - (axisLabelDistance || 0)) : -10) //TODO: consider calculating this based on largest tick width... OR at least expose this on chart
                             .attr('x', rotateYLabel ? (d3.max(scale.range()) / 2) : axis.tickPadding());
                         if (showMaxMin) {
-                            gEnter.selectAll('g.nv-axisMaxMin')
-                                .data(scale.domain());
-                            axisMaxMin=gEnter.enter().append('g').attr('class',function(d,i){
-                                return ['nv-axisMaxMin','nv-axisMaxMin-y',(i == 0 ? 'nv-axisMin-y':'nv-axisMax-y')].join(' ')
-                            })
-                            axisMax = container.selectAll('g.nv-wrap.nv-axis').selectAll('g.nv-axisMaxMin')
-                                .data(scale.domain());
-                            axisMaxMin = axisMax.merge(axisMaxMin);
+                            axisMaxMin = gEnter
+                                .enter()
+                                .append("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-y", i === 0 ? "nv-axisMin-y" : "nv-axisMax-y"].join(" ")
+                                )
+                                .merge(gEnter);
+
+                            axisMaxMin = container.selectAll("g.nv-wrap.nv-axis").selectAll("g.nv-axisMaxMin")
+                                .data(scale.domain())
+                                .join("g")
+                                .attr("class", (d, i) =>
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-y", i === 0 ? "nv-axisMin-y" : "nv-axisMax-y"].join(" ")
+                                );
                             axisMaxMin.append('text')
                                 .style('opacity', 0);
                             axisMaxMin.exit().remove();
@@ -2009,7 +2023,7 @@ Check equality of 2 array
                                 .enter()
                                 .append("g")
                                 .attr("class", (d, i) =>
-                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-y", i === 0 ? "nv-axisMin-y" : "nv-axisMax-y"].join(" ")
                                 )
                                 .merge(gEnter);
 
@@ -2017,7 +2031,7 @@ Check equality of 2 array
                                 .data(scale.domain())
                                 .join("g")
                                 .attr("class", (d, i) =>
-                                    ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
+                                    ["nv-axisMaxMin", "nv-axisMaxMin-y", i === 0 ? "nv-axisMin-y" : "nv-axisMax-y"].join(" ")
                                 );
                             axisMaxMin
                                 .append('text')
@@ -2063,7 +2077,7 @@ Check equality of 2 array
 
                     //if Max and Min = 0 only show min, Issue #281
                     if (scale.domain()[0] == scale.domain()[1] && scale.domain()[0] == 0) {
-                        axisMaxMin.style('opacity', function (d, i) {
+                        wrap.selectAll('g.nv-axisMaxMin').style('opacity', function (d, i) {
                             return !i ? 1 : 0
                         });
                     }
@@ -3694,7 +3708,6 @@ Check equality of 2 array
                 var wrapEnter = wrap.enter()
                     .append('g')
                     .attr('class', 'nvd3 nv-wrap nv-cumulativeLine')
-                    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 var gEnter = wrapEnter.append('g');
                 var g = gEnter.select('g');
@@ -3734,6 +3747,7 @@ Check equality of 2 array
                     legendWrapAppend
                         .attr('transform', 'translate(0,' + (-margin.top) +')')
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 // Controls
                 if (!showControls) {
@@ -8999,7 +9013,6 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-historicalBarChart').data([data]);
                 var wrapEnter=wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-historicalBarChart');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 var gEnter = wrapEnter.append('g');
                 var g = wrapEnter.select('g');
@@ -9029,6 +9042,7 @@ Options for chart:
                     legendWrapAppend
                         .attr('transform', 'translate(0,' + (-margin.top) +')')
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
                 if (rightAlignYAxis) {
                     yAxisAppend
                         .attr("transform", "translate(" + availableWidth + ",0)");
@@ -10072,7 +10086,6 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-lineChart').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-lineChart');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 var gEnter = wrapEnter.append('g');
                 var g = gEnter.select('g');
@@ -10117,6 +10130,7 @@ Options for chart:
 
                 }
 
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
                 if (rightAlignYAxis) {
                     yAxisAppend
                         .attr("transform", "translate(" + availableWidth + ",0)");
@@ -10692,7 +10706,7 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-linePlusBar').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-linePlusBar');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
 
                 var gEnter = wrapEnter.append('g');
                 var g = gEnter.select('g');
@@ -10751,6 +10765,7 @@ Options for chart:
                     legendWrapAppend
                         .attr('transform', 'translate(' + legendXPosition + ',' + (-margin.top) +')');
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 //============================================================
                 // Context chart (focus chart) components
@@ -11833,7 +11848,7 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-multiBarWithLegend').data([data]);
                 var wrapEnter=wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-multiBarWithLegend');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
                 var gEnter = wrapEnter.append('g');
                 var g = gEnter.select('g');
 
@@ -11882,6 +11897,7 @@ Options for chart:
                             .attr('transform', 'translate(' + controlWidth() + ',' + (-margin.top) +')');
                     }
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 // Controls
                 if (!showControls) {
@@ -12748,7 +12764,7 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-multiBarHorizontalChart').data([data]);
                 var wrapEnter=wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-multiBarHorizontalChart');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
                 var gEnter = wrapEnter.append('g');
                 var g = gEnter.select('g');
 
@@ -12791,6 +12807,7 @@ Options for chart:
                             .attr('transform', 'translate(' + controlWidth() + ',' + (-margin.top) +')');
                     }
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 // Controls
                 if (!showControls) {
@@ -13122,7 +13139,7 @@ Options for chart:
 
                 var wrap = container.selectAll('g.wrap.multiChart').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'wrap nvd3 multiChart');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
 
                 var gEnter = wrapEnter.append('g');
 
@@ -13173,6 +13190,7 @@ Options for chart:
                     legendWrapAppend
                         .attr('transform', 'translate(' + legendXPosition + ',' + (-margin.top) +')');
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 lines1
                     .width(availableWidth)
@@ -15330,7 +15348,7 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-pieChart').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-pieChart');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
                 var gEnter = wrapEnter.append('g');
                 var g = wrapEnter.select('g');
 
@@ -15382,6 +15400,7 @@ Options for chart:
                             .attr('transform', 'translate(0,' + availableHeight +')');
                     }
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 // Main Chart Component(s)
                 pie.width(availableWidth).height(availableHeight);
@@ -16936,7 +16955,7 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-scatterChart').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-scatterChart nv-chart-' + scatter.id());
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
                 var gEnter = wrapEnter.append('g');
                 var g = gEnter.select('g');
 
@@ -16946,6 +16965,7 @@ Options for chart:
                 var xAxisAppend=gEnter.append('g').attr('class', 'nv-x nv-axis');
                 xAxisAppend = container.selectAll('g.nv-wrap.nv-scatterChart').select('.nv-x');
                 var yAxisAppend=gEnter.append('g').attr('class', 'nv-y nv-axis');
+                yAxisAppend = container.selectAll('g.nv-wrap.nv-scatterChart').select('.nv-y');
                 var scatterWrapAppend=gEnter.append('g').attr('class', 'nv-scatterWrap');
                 scatterWrapAppend = container.selectAll('g.nv-wrap.nv-scatterChart').select('.nv-scatterWrap');
                 var regressionLinesWrapAppend=gEnter.append('g').attr('class', 'nv-regressionLinesWrap');
@@ -16979,6 +16999,7 @@ Options for chart:
                     legendWrapAppend
                         .attr('transform', 'translate(0' + ',' + (-margin.top) +')');
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 
                 // Main Chart Component(s)
@@ -18086,7 +18107,7 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-stackedAreaChart').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-stackedAreaChart');
-                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
                 var gEnter = wrapEnter.append('g');
                 var g = wrapEnter.select('g');
 
@@ -18135,6 +18156,7 @@ Options for chart:
                             .attr('transform', 'translate(' + (availableWidth-legendWidth) + ',' + (-margin.top) +')');
                     }
                 }
+                wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 // Controls
                 if (!showControls) {
