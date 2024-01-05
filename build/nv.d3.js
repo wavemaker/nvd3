@@ -14971,8 +14971,14 @@ Options for chart:
 
                 ae.attr('fill', function(d,i) { return color(d.data, i); });
                 ae.attr('stroke', function(d,i) { return color(d.data, i); });
+                let path = ae.select('path'); // Try to select existing path
 
-                var paths = ae.append('path').each(function(d) {
+                if (path.empty()) {
+                    // If path doesn't exist, append it
+                    path = ae.append('path');
+                }
+
+                var paths = ae.selectAll('path').each(function(d) {
                     this._current = d;
                 });
 
@@ -15086,20 +15092,20 @@ Options for chart:
 
                             if(typeof labelType === 'function') {
                                 label = labelType(d, i, {
-                                    'key': getX(d.data),
-                                    'value': getY(d.data),
+                                    'key': getX(d.data).replace(/\.0+$/, ''),
+                                    'value': getY(d.data).replace(/\.0+$/, ''),
                                     'percent': valueFormat(percent)
                                 });
                             } else {
                                 switch (labelType) {
                                     case 'key':
-                                        label = getX(d.data);
+                                        label = getX(d.data).replace(/\.0+$/, '');
                                         break;
                                     case 'value':
-                                        label = valueFormat(getY(d.data));
+                                        label = valueFormat(getY(d.data)).replace(/\.0+$/, '');
                                         break;
                                     case 'percent':
-                                        label = d3.format('.0%')(percent);
+                                        label = d3.format('.0%')(percent).replace(/\.0+$/, '');
                                         break;
                                 }
                             }
@@ -16286,7 +16292,6 @@ Options for chart:
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-scatter').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-scatter nv-chart-' + id)
-                    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');;
                 wrapEnter.classed('nv-single-point', singlePoint);
                 var defsEnter = wrapEnter.append('defs');
                 var gEnter = wrapEnter.append('g');
@@ -16294,7 +16299,7 @@ Options for chart:
                 var nvGroups = gEnter.append('g').attr('class', 'nv-groups');
                 var nvPointPaths = gEnter.append('g').attr('class', 'nv-point-paths');
                 var nvPointClips = wrapEnter.append('g').attr('class', 'nv-point-clips');
-
+                wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
                 var defsRect=defsEnter.append('clipPath')
                     .attr('id', 'nv-edge-clip-' + id)
                     .append('rect')
