@@ -783,9 +783,8 @@ The callback function is optional, and it is called when the generate function c
         var positionTooltip = function () {
             nv.dom.read(function() {
                 const pos = position(),
-                    gravityOffset = calcGravityOffset(pos),
-                    left = pos.left + gravityOffset.left,
-                    top = pos.top + gravityOffset.top;
+                    left = pos.left,
+                    top = pos.top;
 
                 // delay hiding a bit to avoid flickering
                 if (hidden) {
@@ -1740,7 +1739,7 @@ Check equality of 2 array
         // Public Variables with Default Settings
         //------------------------------------------------------------
 
-        var scale = d3.scaleBand();
+        var scale = d3.scaleOrdinal();
 
         var margin = {top: 0, right: 0, bottom: 0, left: 0}
             , width = 75 //only used for tickLabel currently
@@ -1845,8 +1844,10 @@ Check equality of 2 array
                                 .attr("class", (d, i) =>
                                     ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
                                 );
-
-                            axisMaxMin.append('text');
+                            var textElem = axisMaxMin.select('text');
+                            if(textElem.empty()) {
+                                axisMaxMin.append('text');
+                            }
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -1931,7 +1932,10 @@ Check equality of 2 array
                                 .attr("class", (d, i) =>
                                     ["nv-axisMaxMin", "nv-axisMaxMin-x", i === 0 ? "nv-axisMin-x" : "nv-axisMax-x"].join(" ")
                                 );
-                            axisMaxMin.append('text');
+                            var textElem = axisMaxMin.select('text');
+                            if(textElem.empty()) {
+                                axisMaxMin.append('text');
+                            }
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -1977,8 +1981,10 @@ Check equality of 2 array
                                 .attr("class", (d, i) =>
                                     ["nv-axisMaxMin", "nv-axisMaxMin-y", i === 0 ? "nv-axisMin-y" : "nv-axisMax-y"].join(" ")
                                 );
-                            axisMaxMin.append('text')
-                                .style('opacity', 0);
+                            var textElem = axisMaxMin.select('text');
+                            if(textElem.empty()) {
+                                axisMaxMin.append('text').style('opacity', 0);
+                            }
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -2033,9 +2039,10 @@ Check equality of 2 array
                                 .attr("class", (d, i) =>
                                     ["nv-axisMaxMin", "nv-axisMaxMin-y", i === 0 ? "nv-axisMin-y" : "nv-axisMax-y"].join(" ")
                                 );
-                            axisMaxMin
-                                .append('text')
-                                .style('opacity', 0);
+                            var textElem = axisMaxMin.select('text');
+                            if(textElem.empty()) {
+                                axisMaxMin.append('text').style('opacity', 0);
+                            }
                             axisMaxMin.exit().remove();
                             axisMaxMin
                                 .attr('transform', function(d,i) {
@@ -2645,7 +2652,7 @@ Check equality of 2 array
                     xAxisAppend.attr('transform', 'translate(0,' + y.range()[0] + ')');
                     xAxisAppend.call(xAxis);
 
-                    var xTicks = xAxisAppend.selectAll('g');
+                    var xTicks = xAxisAppend.select("g.nvd3.nv-wrap.nv-axis").selectAll('g');
                     if (staggerLabels) {
                         xTicks
                             .selectAll('text')
@@ -3797,10 +3804,11 @@ Check equality of 2 array
                         .xScale(x);
                     interactiveAppend.call(interactiveLayer);
                 }
-
-                var rectAppend=backgroundAppend
-                    .append('rect');
-
+                var rectAppend = backgroundAppend.select('rect');
+                if(rectAppend.empty()) {
+                    var rect= backgroundAppend
+                        .append('rect');
+                }
                 rectAppend
                     .attr('width', availableWidth)
                     .attr('height', availableHeight);
@@ -3885,7 +3893,7 @@ Check equality of 2 array
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/70, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/70, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -3898,7 +3906,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -5078,7 +5086,7 @@ Check equality of 2 array
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -5086,7 +5094,7 @@ Check equality of 2 array
                         .attr('transform', 'translate(0,' + (y.range()[0] + ((discretebar.showValues() && y.domain()[0] < 0) ? 16 : 0)) + ')');
                     xAxisAppend.call(xAxis);
 
-                    var xTicks = xAxisAppend.selectAll('g');
+                    var xTicks = xAxisAppend.select("g.nvd3.nv-wrap.nv-axis").selectAll('g');
                     if (staggerLabels) {
                         xTicks
                             .selectAll('text')
@@ -5109,7 +5117,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data, discretebar.y()) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/36, data, discretebar.y()) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -6484,7 +6492,7 @@ Check equality of 2 array
                     //g.select('.nv-x.nv-axis').select('.nv-axislabel')
                     //    .style('font-size', d3.min([availableWidth * 0.05,20]) + 'px')
 
-                    var xTicks = g.select('.nv-x.nv-axis').selectAll('g');
+                    var xTicks = g.select('.nv-x.nv-axis').select("g.nvd3.nv-wrap.nv-axis").selectAll('g');
                     if (staggerLabels) {
                         xTicks
                             .selectAll('text')
@@ -6766,7 +6774,7 @@ Check equality of 2 array
 
                 if (showXAxis) {
                     xAxis.scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -6780,7 +6788,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -8488,7 +8496,7 @@ Options for chart:
                 // Setup Axes
                 xAxis
                     .scale(x)
-                    ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                    .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                 xAxis
                     .tickSizeInner(-availableHeight);
 
@@ -8499,7 +8507,7 @@ Options for chart:
                     .selectAll('.tick')
                     .style('opacity', function() { return showXAxis ? 1 : 0 } )
 
-                var xTicks = axisX.selectAll('g');
+                var xTicks = axisX.select("g.nvd3.nv-wrap.nv-axis").selectAll('g');
 
                 xTicks
                     .selectAll('.tick text')
@@ -8537,7 +8545,7 @@ Options for chart:
 
                 yAxis
                     .scale(y)
-                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                 yAxis
                     .tickSizeInner( -availableWidth);
 
@@ -9073,7 +9081,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -9087,7 +9095,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -10166,7 +10174,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        ._ticks(nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks(nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -10175,7 +10183,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
                 }
@@ -10811,7 +10819,7 @@ Options for chart:
                 // context (focus chart) axis controls
                 if (focusShowAxisX) {
                     x2Axis
-                        ._ticks( nv.utils.calcTicksX(availableWidth / 100, data))
+                        .ticks( nv.utils.calcTicksX(availableWidth / 100, data))
                     x2Axis
                         .tickSizeInner(-availableHeight2);
                     xAxisAppend
@@ -10823,12 +10831,12 @@ Options for chart:
                 if (focusShowAxisY) {
                     y3Axis
                         .scale(y3)
-                        ._ticks( availableHeight2 / 36 )
+                        .ticks( availableHeight2 / 36 )
                     y3Axis
                         .tickSizeInner( -availableWidth);
                     y4Axis
                         .scale(y4)
-                        ._ticks( availableHeight2 / 36 )
+                        .ticks( availableHeight2 / 36 )
                     y4Axis
                         .tickSizeInner(dataBars.length ? 0 : -availableWidth); // Show the y2 rules only if y1 has none
 
@@ -10994,7 +11002,7 @@ Options for chart:
 
                     xAxis
                         .scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight1);
 
@@ -11012,12 +11020,12 @@ Options for chart:
 
                     y1Axis
                         .scale(y1)
-                        ._ticks( nv.utils.calcTicksY(availableHeight1/36, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight1/36, data) )
                     y1Axis
                         .tickSizeInner(-availableWidth);
                     y2Axis
                         .scale(y2)
-                        ._ticks( nv.utils.calcTicksY(availableHeight1/36, data) );
+                        .ticks( nv.utils.calcTicksY(availableHeight1/36, data) );
 
                     // Show the y2 rules only if y1 has none
                     if(!switchYAxisOrder) {
@@ -11940,7 +11948,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -11949,7 +11957,7 @@ Options for chart:
                     xAxisAppend
                         .call(xAxis);
 
-                    var xTicks = xAxisAppend.selectAll('g');
+                    var xTicks = xAxisAppend.select("g.nvd3.nv-wrap.nv-axis").selectAll('g');
 
                     xTicks
                         .selectAll('line, text')
@@ -11975,9 +11983,9 @@ Options for chart:
                             });
                     }
 
-                    if (wrapLabels) {
+                    if (true) {
                         gEnter.selectAll('.tick text')
-                            .call(nv.utils.wrapTicks, chart.xAxis.bandwidth())
+                            .call(nv.utils.wrapTicks, chart.xScale().bandwidth())
                     }
 
                     if (reduceXTicks)
@@ -11986,7 +11994,7 @@ Options for chart:
                                 return i % Math.ceil(data[0].values.length / (availableWidth / 100)) !== 0;
                             })
                             .selectAll('text, line')
-                            .style('opacity', 1);
+                            .style('opacity', 0);
 
                     if(rotateLabels)
                         xTicks
@@ -12001,7 +12009,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -12488,12 +12496,12 @@ Options for chart:
                         .attr('y', x.bandwidth() / (data.length * 2))
                         .attr('dy', '.32em')
                         .text(function(d,i) {
-                            var t = valueFormat(getY(d,i))
+                            var t = valueFormat(getY(d,i)).replace(/\.0+%$/, "%")
                                 , yerr = getYerr(d,i);
                             if (yerr === undefined)
                                 return t;
                             if (!yerr.length)
-                                return t + '±' + valueFormat(Math.abs(yerr));
+                                return t + '±' + valueFormat(Math.abs(yerr))
                             return t + '+' + valueFormat(Math.abs(yerr[1])) + '-' + valueFormat(Math.abs(yerr[0]));
                         });
                     bars.watchTransition(renderWatch, 'multibarhorizontal: bars')
@@ -12856,13 +12864,13 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/24, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/24, data) )
                     xAxis
                         .tickSizeInner(-availableWidth);
 
                     xAxisAppend.call(xAxis);
 
-                    var xTicks = xAxisAppend.selectAll('g');
+                    var xTicks = xAxisAppend.select("g.nvd3.nv-wrap.nv-axis").selectAll('g');
 
                     xTicks
                         .selectAll('line, text');
@@ -12871,7 +12879,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     yAxis
                         .tickSizeInner( -availableHeight);
 
@@ -13320,7 +13328,7 @@ Options for chart:
                 if(dataScatters2.length){scatters2WrapAppend.transition().call(scatters2);}
 
                 xAxis
-                    ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                    .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                 xAxis
                     .tickSizeInner(-availableHeight);
 
@@ -13330,7 +13338,7 @@ Options for chart:
                     .call(xAxis);
 
                 yAxis1
-                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                 yAxis1
                     .tickSizeInner( -availableWidth);
 
@@ -13339,7 +13347,7 @@ Options for chart:
                     .call(yAxis1);
 
                 yAxis2
-                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                 yAxis2
                     .tickSizeInner( -availableWidth);
 
@@ -14843,8 +14851,9 @@ Options for chart:
                 var gEnter = wrapEnter.append('g');
                 var g = wrap.select('g');
                 var g_pie = gEnter.append('g').attr('class', 'nv-pie');
+                g_pie = container.selectAll('.nv-wrap.nv-pie').selectAll('.nv-pie');
                 var g_pie_labels = gEnter.append('g').attr('class', 'nv-pieLabels');
-
+                g_pie_labels = container.selectAll('.nv-wrap.nv-pie').selectAll('.nv-pieLabels');
                 wrap.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
                 g_pie.attr('transform', 'translate(' + availableWidth / 2 + ',' + availableHeight / 2 + ')');
                 g_pie_labels.attr('transform', 'translate(' + availableWidth / 2 + ',' + availableHeight / 2 + ')');
@@ -14900,7 +14909,12 @@ Options for chart:
 
                 // if title is specified and donut, put it in the middle
                 if (donut && title) {
-                    g_pie.append("text").attr('class', 'nv-pie-title');
+                    let pieTitle = g_pie.select('.nv-pie-title'); // Try to select existing path
+
+                    if (pieTitle.empty()) {
+                        // If title doesn't exist, append it
+                        g_pie.append("text").attr('class', 'nv-pie-title');
+                    }
 
                     wrap.select('.nv-pie-title')
                         .style("text-anchor", "middle")
@@ -14915,7 +14929,8 @@ Options for chart:
                 }
 
                 var slices = container.select('.nv-wrap.nv-pie').selectAll('.nv-pie').selectAll('.nv-slice').data(pie(data));
-                var pieLabels = container.select('.nv-wrap.nv-pie').selectAll('.nv-pieLabels').selectAll('.nv-label').data(pie(data));
+                var pieLabels = container.select('.nv-wrap.nv-pie').selectAll('.nv-pieLabels').selectAll('.nv-label').data(pie(data.filter(function(d) {return !d.disabled}
+                )));
 
 
 
@@ -15004,8 +15019,9 @@ Options for chart:
                             labelsArc[i].innerRadius(0);
                         }
                     }
+                    pieLabels.enter().append("g").classed("nv-label",true);
 
-                    var pieLabelsEnter=pieLabels.enter().append("g").classed("nv-label",true).each(function(d,i) {
+                    var pieLabelsEnter=container.select('.nv-wrap.nv-pie').selectAll('.nv-pieLabels').selectAll('.nv-label').each(function(d,i) {
                         var group = d3.select(this);
 
                         group.attr('transform', function (d, i) {
@@ -15025,14 +15041,15 @@ Options for chart:
                                 return 'translate(' + labelsArc[i].centroid(d) + ')'
                             }
                         });
-
-                        group.append('rect')
+                        var rectAppend =  group.append('rect');
+                        container.select(".nv-wrap.nv-pie").selectAll(".nv-pieLabels").select('rect')
                             .style('stroke', '#fff')
                             .style('fill', '#fff')
                             .attr("rx", 3)
                             .attr("ry", 3);
 
-                        group.append('text')
+                        var textAppend =  group.append('text');
+                        container.select(".nv-wrap.nv-pie").selectAll(".nv-pieLabels").select('text')
                             .style('text-anchor', labelSunbeamLayout ? ((d.startAngle + d.endAngle) / 2 < Math.PI ? 'start' : 'end') : 'middle') //center the text on it's origin or begin/end if orthogonal aligned
                             .style('fill', '#000')
                     });
@@ -15350,7 +15367,6 @@ Options for chart:
                 } else {
                     container.selectAll('.nv-noData').remove();
                 }
-
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-wrap.nv-pieChart').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-pieChart');
@@ -17065,7 +17081,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner( -availableHeight);
 
@@ -17077,7 +17093,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -18258,7 +18274,7 @@ Options for chart:
                 // Setup Axes
                 if (showXAxis) {
                     xAxis.scale(x)
-                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner( -availableHeight);
                 }
@@ -18272,7 +18288,7 @@ Options for chart:
                         ticks = nv.utils.calcTicksY(availableHeight/36, data);
                     }
                     yAxis.scale(y)
-                        ._ticks(ticks)
+                        .ticks(ticks)
                     yAxis
                         .tickSizeInner(-availableWidth);
                 }
