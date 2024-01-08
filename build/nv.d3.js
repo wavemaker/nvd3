@@ -730,8 +730,8 @@ The callback function is optional, and it is called when the generate function c
         var calcGravityOffset = function(pos) {
             var height = tooltip.node() ? tooltip.node().offsetHeight : 0,
                 width = tooltip.node() ? tooltip.node().offsetWidth : 0,
-                clientWidth = document.documentElement.clientWidth, // Don't want scrollbars.
-                clientHeight = document.documentElement.clientHeight, // Don't want scrollbars.
+               // clientWidth = document.documentElement.clientWidth, // Don't want scrollbars.
+               // clientHeight = document.documentElement.clientHeight, // Don't want scrollbars.
                 left, top, tmp;
 
             // calculate position based on gravity
@@ -741,28 +741,28 @@ The callback function is optional, and it is called when the generate function c
                     top = - (height / 2);
                     if(pos.left + left < 0) left = distance;
                     if((tmp = pos.top + top) < 0) top -= tmp;
-                    if((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
+                 //   if((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
                     break;
                 case 'w':
                     left = distance;
                     top = - (height / 2);
-                    if (pos.left + left + width > clientWidth) left = - width - distance;
+                //    if (pos.left + left + width > clientWidth) left = - width - distance;
                     if ((tmp = pos.top + top) < 0) top -= tmp;
-                    if ((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
+                //    if ((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
                     break;
                 case 'n':
                     left = - (width / 2) - 5; // - 5 is an approximation of the mouse's height.
                     top = distance;
-                    if (pos.top + top + height > clientHeight) top = - height - distance;
+                  //  if (pos.top + top + height > clientHeight) top = - height - distance;
                     if ((tmp = pos.left + left) < 0) left -= tmp;
-                    if ((tmp = pos.left + left + width) > clientWidth) left -= tmp - clientWidth;
+                  //  if ((tmp = pos.left + left + width) > clientWidth) left -= tmp - clientWidth;
                     break;
                 case 's':
                     left = - (width / 2);
                     top = - height - distance;
                     if (pos.top + top < 0) top = distance;
                     if ((tmp = pos.left + left) < 0) left -= tmp;
-                    if ((tmp = pos.left + left + width) > clientWidth) left -= tmp - clientWidth;
+                   // if ((tmp = pos.left + left + width) > clientWidth) left -= tmp - clientWidth;
                     break;
                 case 'center':
                     left = - (width / 2);
@@ -783,8 +783,9 @@ The callback function is optional, and it is called when the generate function c
         var positionTooltip = function () {
             nv.dom.read(function() {
                 const pos = position(),
-                    left = pos.left,
-                    top = pos.top;
+                    gravityOffset = calcGravityOffset(pos),
+                    left = pos.left + gravityOffset.left,
+                    top = pos.top + gravityOffset.top;
 
                 // delay hiding a bit to avoid flickering
                 if (hidden) {
