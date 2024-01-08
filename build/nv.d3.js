@@ -9359,7 +9359,7 @@ Options for chart:
                 var availableWidth = width - margin.left - margin.right,
                     container = d3.select(this);
                 nv.utils.initSVG(container);
-
+                container.selectAll('g.nv-legend').remove();
                 // Setup containers and skeleton of chart
                 var wrap = container.selectAll('g.nv-legend').data([data]);
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-legend');
@@ -11983,7 +11983,7 @@ Options for chart:
                             });
                     }
 
-                    if (true) {
+                    if (wrapLabels) {
                         gEnter.selectAll('.tick text')
                             .call(nv.utils.wrapTicks, chart.xScale().bandwidth())
                     }
