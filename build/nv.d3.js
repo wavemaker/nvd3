@@ -14987,14 +14987,7 @@ Options for chart:
 
                 ae.attr('fill', function(d,i) { return color(d.data, i); });
                 ae.attr('stroke', function(d,i) { return color(d.data, i); });
-                let path = ae.select('path'); // Try to select existing path
-
-                if (path.empty()) {
-                    // If path doesn't exist, append it
-                    path = ae.append('path');
-                }
-
-                var paths = ae.selectAll('path').each(function(d) {
+                var paths = ae.append('path').each(function(d) {
                     this._current = d;
                 });
 
