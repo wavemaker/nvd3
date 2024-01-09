@@ -18,13 +18,49 @@ Simply add the `nv.d3` assets to your project and include them in your HTML.
 
 ### Dependencies
 
-NVD3 is recommended to go with [d3.js](http://d3js.org/) version 3.5.3 and later, but NOT d3 4.x yet. [version 3.5.17](https://github.com/d3/d3/releases/tag/v3.5.17) is the most recent d3 v3 release. 
+NVD3 is recommended to go with [d3.js](http://d3js.org/) version 7.8.5 and later as (https://github.com/d3/d3/releases/tag/v7.8.5) is the most recent d3 v3 release. 
 
 **Minimum D3 version required: 7.8.5**
 
 For a D3v4 Version, see the work in progress at the [nvd3 organization](http://github.com/nvd3/nvd3)
 
-Along with `pieChart` options `padAngle` and `cornerRadius`, the interactive guideline tooltip now requires these later versions of D3 (3.4.4+, specifically, to get interactive tooltips). The interactive guide lines rely on the more recent `d3.bisector()` method which treats accessors taking two parameters (the second being the element index) as comparators (see [d3.bisector()](https://github.com/mbostock/d3/wiki/Arrays#d3_bisector)).
+**Differences in D3 v3 and v7**
+
+**1.Axes and Scales:**
+While the core concepts of axes and scales remain similar, there are improvements and refinements in v7 for creating scales and axes, offering more control and customization options.
+   * d3.scale.linear() = d3.scaleLinear()
+   * d3.scale.ordinal() = d3.scaleOrdinal()
+   * d3.svg.arc()= d3.arc()
+   * d3.svg.axis.orient('bottom') = d3.axisBottom()
+   * render_end = chartinstance.dispatch.on('renderEnd')
+   * d3.event.pageX() = d3.pageX()
+   * d3.time.format() = d3.timeFormat()
+   * d3.time.Scale() = d3.scaleTime()
+   * Changes in Mouse Event Callbacks:
+     The arguments passed in mouse events callback functions changed from data, index => event, data, index.
+        a.In D3 v3, the mouse event callback functions received data and index as the first and second arguments.
+        b.In D3 v7, the order is changed, and the callback functions receive events as the first argument, followed by data and index.
+          This change aligns with a more standard convention where the event object is the first parameter in callback functions.
+
+**2.Immutability in D3 v7:**
+
+a.D3 v7 introduces a more immutable approach to selections. In the new model, selections are immutable, meaning that methods called on selections do not modify the existing selection but instead return a new selection.
+
+b.This immutability simplifies the understanding of code behavior, as it avoids unexpected side effects that might occur when methods modify the original selection.
+
+c.In D3 v7, the selectAll method returns a new immutable selection.The attr and style methods are called on the selection, but they don't modify the original selection. Instead, they return a new selection with the specified attributes and styles.
+      
+#D3 v3
+
+  var circles = d3.selectAll("circle");
+  circles.attr("r", 10);
+  circles.style("fill", "blue");
+
+#D3 v7
+
+  const circles = d3.selectAll("circle")
+  .attr("r", 10)
+  .style("fill", "blue");
 
 
 ## Supported Browsers
@@ -36,9 +72,9 @@ NVD3 runs best on WebKit based browsers.
 * Firefox: latest version
 * Internet Explorer: 10+
 
-## Do we support D3 v4.x?
+## Do we support D3 v4.x and above?
 
-No, we do not...  we are very interested in taking this on but could use some help.  Please let us know if you'd like to help make this a reality!  :)
+Yes, we do support till d3 version 7.8.5
 
 ## Changelog
 
