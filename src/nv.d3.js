@@ -731,7 +731,7 @@ The callback function is optional, and it is called when the generate function c
             var height = tooltip.node() ? tooltip.node().offsetHeight : 0,
                 width = tooltip.node() ? tooltip.node().offsetWidth : 0,
                 clientWidth = document.documentElement.clientWidth, // Don't want scrollbars.
-               // clientHeight = document.documentElement.clientHeight, // Don't want scrollbars.
+                // clientHeight = document.documentElement.clientHeight, // Don't want scrollbars.
                 left, top, tmp;
 
             // calculate position based on gravity
@@ -741,19 +741,19 @@ The callback function is optional, and it is called when the generate function c
                     top = - (height / 2);
                     if(pos.left + left < 0) left = distance;
                     if((tmp = pos.top + top) < 0) top -= tmp;
-                 //   if((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
+                    //   if((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
                     break;
                 case 'w':
                     left = distance;
                     top = - (height / 2);
                     if (pos.left + left + width > clientWidth) left = - width - distance;
                     if ((tmp = pos.top + top) < 0) top -= tmp;
-                //    if ((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
+                    //    if ((tmp = pos.top + top + height) > clientHeight) top -= tmp - clientHeight;
                     break;
                 case 'n':
                     left = - (width / 2) - 5; // - 5 is an approximation of the mouse's height.
                     top = distance;
-                  //  if (pos.top + top + height > clientHeight) top = - height - distance;
+                    //  if (pos.top + top + height > clientHeight) top = - height - distance;
                     if ((tmp = pos.left + left) < 0) left -= tmp;
                     if ((tmp = pos.left + left + width) > clientWidth) left -= tmp - clientWidth;
                     break;
@@ -2129,6 +2129,29 @@ Check equality of 2 array
                         return !parseFloat(Math.round(d * 100000) / 1000000) && (d !== undefined)
                     })
                     .classed('zero', true);
+
+                gEnter.selectAll(".tick text")
+                    .each(function(d) {
+                        var tickText = d3.select(this);
+
+                        // Check the width of each tick text
+                        setTimeout(function() {
+                            var textWidth = tickText.node().getBoundingClientRect().width;
+                            // Set a maximum width (e.g., 50 pixels)
+                            var maxWidth = 50;
+
+                            // If the width is greater than the maximum, trim the text
+                            if (textWidth > maxWidth) {
+                                var originalText = tickText.text();
+
+                                // Trim the text and append ellipsis
+                                var trimmedText = originalText.substring(0, 8) + "..."; // Adjust the substring length as needed
+                                tickText.text(trimmedText);
+                            }
+                        }, 0);
+
+
+                    });
 
                 //store old scales for use in transitions on update
                 scale0 = scale.copy();
