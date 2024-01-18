@@ -2136,19 +2136,19 @@ Check equality of 2 array
 
                         // Check the width of each tick text
                         setTimeout(function() {
-                            var textWidth = tickText.node().getBoundingClientRect().width;
+                            var textWidth = tickText.node().getComputedTextLength();
                             // Set a maximum width (e.g., 50 pixels)
-                            var maxWidth = 50;
+                            var maxWidth = 120;
 
                             // If the width is greater than the maximum, trim the text
                             if (textWidth > maxWidth) {
                                 var originalText = tickText.text();
 
                                 // Trim the text and append ellipsis
-                                var trimmedText = originalText.substring(0, 8) + "..."; // Adjust the substring length as needed
+                                var trimmedText = originalText.substring(0, 10) + "..."; // Adjust the substring length as needed
                                 tickText.text(trimmedText);
                             }
-                        }, 0);
+                        }, 100);
 
 
                     });
@@ -2669,7 +2669,7 @@ Check equality of 2 array
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -2687,7 +2687,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( Math.floor(availableHeight/36) ) // can't use nv.utils.calcTicksY with Object data
+                        ._ticks( Math.floor(availableHeight/36) ) // can't use nv.utils.calcTicksY with Object data
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -3917,7 +3917,7 @@ Check equality of 2 array
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/70, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/70, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -3930,7 +3930,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -5110,7 +5110,7 @@ Check equality of 2 array
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -5141,7 +5141,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksY(availableHeight/36, data, discretebar.y()) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data, discretebar.y()) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -5644,7 +5644,7 @@ Check equality of 2 array
                         bandwidthCalc = calcBandwidth(v); // calculate with default 'scott'
                     }
                 }
-                var kde = kernelDensityEstimator(eKernel(bandwidthCalc), yScale.ticks(resolution));
+                var kde = kernelDensityEstimator(eKernel(bandwidthCalc), yScale._ticks(resolution));
                 var kdeDat = clampViolin ? clampViolinKDE(kde(v), d3.extent(v)) : kde(v);
 
 
@@ -6506,7 +6506,7 @@ Check equality of 2 array
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -6527,7 +6527,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( Math.floor(availableHeight/36) ) // can't use nv.utils.calcTicksY with Object data
+                        ._ticks( Math.floor(availableHeight/36) ) // can't use nv.utils.calcTicksY with Object data
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -6798,7 +6798,7 @@ Check equality of 2 array
 
                 if (showXAxis) {
                     xAxis.scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -6812,7 +6812,7 @@ Check equality of 2 array
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -8520,7 +8520,7 @@ Options for chart:
                 // Setup Axes
                 xAxis
                     .scale(x)
-                    .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                    ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                 xAxis
                     .tickSizeInner(-availableHeight);
 
@@ -8569,7 +8569,7 @@ Options for chart:
 
                 yAxis
                     .scale(y)
-                    .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                 yAxis
                     .tickSizeInner( -availableWidth);
 
@@ -9105,7 +9105,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -9119,7 +9119,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -10198,7 +10198,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks(nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks(nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -10207,7 +10207,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
                 }
@@ -10843,7 +10843,7 @@ Options for chart:
                 // context (focus chart) axis controls
                 if (focusShowAxisX) {
                     x2Axis
-                        .ticks( nv.utils.calcTicksX(availableWidth / 100, data))
+                        ._ticks( nv.utils.calcTicksX(availableWidth / 100, data))
                     x2Axis
                         .tickSizeInner(-availableHeight2);
                     xAxisAppend
@@ -10855,12 +10855,12 @@ Options for chart:
                 if (focusShowAxisY) {
                     y3Axis
                         .scale(y3)
-                        .ticks( availableHeight2 / 36 )
+                        ._ticks( availableHeight2 / 36 )
                     y3Axis
                         .tickSizeInner( -availableWidth);
                     y4Axis
                         .scale(y4)
-                        .ticks( availableHeight2 / 36 )
+                        ._ticks( availableHeight2 / 36 )
                     y4Axis
                         .tickSizeInner(dataBars.length ? 0 : -availableWidth); // Show the y2 rules only if y1 has none
 
@@ -11026,7 +11026,7 @@ Options for chart:
 
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight1);
 
@@ -11044,12 +11044,12 @@ Options for chart:
 
                     y1Axis
                         .scale(y1)
-                        .ticks( nv.utils.calcTicksY(availableHeight1/36, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight1/36, data) )
                     y1Axis
                         .tickSizeInner(-availableWidth);
                     y2Axis
                         .scale(y2)
-                        .ticks( nv.utils.calcTicksY(availableHeight1/36, data) );
+                        ._ticks( nv.utils.calcTicksY(availableHeight1/36, data) );
 
                     // Show the y2 rules only if y1 has none
                     if(!switchYAxisOrder) {
@@ -11972,7 +11972,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner(-availableHeight);
 
@@ -12033,7 +12033,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -12888,7 +12888,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksY(availableHeight/24, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/24, data) )
                     xAxis
                         .tickSizeInner(-availableWidth);
 
@@ -12903,7 +12903,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     yAxis
                         .tickSizeInner( -availableHeight);
 
@@ -13352,7 +13352,7 @@ Options for chart:
                 if(dataScatters2.length){scatters2WrapAppend.transition().call(scatters2);}
 
                 xAxis
-                    .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                    ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                 xAxis
                     .tickSizeInner(-availableHeight);
 
@@ -13362,7 +13362,7 @@ Options for chart:
                     .call(xAxis);
 
                 yAxis1
-                    .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                 yAxis1
                     .tickSizeInner( -availableWidth);
 
@@ -13371,7 +13371,7 @@ Options for chart:
                     .call(yAxis1);
 
                 yAxis2
-                    .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                    ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                 yAxis2
                     .tickSizeInner( -availableWidth);
 
@@ -17098,7 +17098,7 @@ Options for chart:
                 if (showXAxis) {
                     xAxis
                         .scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner( -availableHeight);
 
@@ -17110,7 +17110,7 @@ Options for chart:
                 if (showYAxis) {
                     yAxis
                         .scale(y)
-                        .ticks( nv.utils.calcTicksY(availableHeight/36, data) )
+                        ._ticks( nv.utils.calcTicksY(availableHeight/36, data) )
                     yAxis
                         .tickSizeInner( -availableWidth);
 
@@ -18291,7 +18291,7 @@ Options for chart:
                 // Setup Axes
                 if (showXAxis) {
                     xAxis.scale(x)
-                        .ticks( nv.utils.calcTicksX(availableWidth/100, data) )
+                        ._ticks( nv.utils.calcTicksX(availableWidth/100, data) )
                     xAxis
                         .tickSizeInner( -availableHeight);
                 }
@@ -18305,7 +18305,7 @@ Options for chart:
                         ticks = nv.utils.calcTicksY(availableHeight/36, data);
                     }
                     yAxis.scale(y)
-                        .ticks(ticks)
+                        ._ticks(ticks)
                     yAxis
                         .tickSizeInner(-availableWidth);
                 }
