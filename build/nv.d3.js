@@ -15136,7 +15136,7 @@ Options for chart:
                                         label = getX(d.data).replace(/\.0+$/, '');
                                         break;
                                     case 'value':
-                                        label = valueFormat(getY(d.data)).replace(/\.0+$/, '');
+                                        label = parseFloat(valueFormat(getY(d.data)).replace(/\.0+$/, ''));
                                         break;
                                     case 'percent':
                                         label = d3.format('.0%')(percent).replace(/\.0+$/, '');
