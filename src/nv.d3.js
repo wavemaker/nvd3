@@ -15126,20 +15126,20 @@ Options for chart:
 
                             if(typeof labelType === 'function') {
                                 label = labelType(d, i, {
-                                    'key': getX(d.data).replace(/\.0+$/, ''),
-                                    'value': getY(d.data).replace(/\.0+$/, ''),
+                                    'key': String(getX(d.data)).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2'),
+                                    'value': String(getY(d.data)).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2'),
                                     'percent': valueFormat(percent)
                                 });
                             } else {
                                 switch (labelType) {
                                     case 'key':
-                                        label = getX(d.data).replace(/\.0+$/, '');
+                                        label = getX(d.data).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2');
                                         break;
                                     case 'value':
-                                        label = parseFloat(valueFormat(getY(d.data)).replace(/\.0+$/, ''));
+                                        label = valueFormat(getY(d.data)).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2');;
                                         break;
                                     case 'percent':
-                                        label = d3.format('.0%')(percent).replace(/\.0+$/, '');
+                                        label = d3.format('.0%')(percent).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2');;
                                         break;
                                 }
                             }
@@ -19233,6 +19233,6 @@ Options for chart:
 
     };
 
-    nv.version = "1.8.6";
+    nv.version = "1.8.9";
 })();
 //# sourceMappingURL=nv.d3.js.map
