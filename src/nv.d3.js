@@ -6719,18 +6719,22 @@ Check equality of 2 array
                 wrapEnter.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
                 var gEnter = wrapEnter.append('g');
-                var g = gEnter.select('g');
+                var g = gEnter;
 
                 var backgroundAppend=gEnter.append('g').attr('class', 'nv-background').append('rect');
-                var xAxisAppend=gEnter.append('g').attr('class', 'nv-x nv-axis');
-                xAxisAppend = container.selectAll('g.nv-wrap.nv-focus').select('.nv-x');
-                var yAxisAppend=gEnter.append('g').attr('class', 'nv-y nv-axis');
+                var xAxisAppendFocus=gEnter.append('g').attr('class', 'nv-x nv-axis');
+                xAxisAppendFocus= container.selectAll('.nv-focus').select('.nv-x.nv-axis');
+                var yAxisAppendFocus=gEnter.append('g').attr('class', 'nv-y nv-axis');
+                yAxisAppendFocus=container.selectAll('.nv-focus').select('.nv-x.nv-axis');
                 var contentWrapAppend=gEnter.append('g').attr('class', 'nv-contentWrap');
+                contentWrapAppend=container.selectAll('.nv-focus').select('.nv-contentWrap');
                 var brushBackgroundAppend=gEnter.append('g').attr('class', 'nv-brushBackground');
+                brushBackgroundAppend=container.selectAll('.nv-focus').select('.nv-brushBackground');
                 var xBrushAppend=gEnter.append('g').attr('class', 'nv-x nv-brush');
+                xBrushAppend=container.selectAll('.nv-focus').select('.nv-x.nv-brush');
 
                 if (rightAlignYAxis) {
-                    yAxisAppend
+                    yAxisAppendFocus
                         .attr("transform", "translate(" + availableWidth + ",0)");
                 }
 
@@ -6802,9 +6806,9 @@ Check equality of 2 array
                     xAxis
                         .tickSizeInner(-availableHeight);
 
-                    xAxisAppend
+                    xAxisAppendFocus
                         .attr('transform', 'translate(0,' + y.range()[0] + ')');
-                    var xs=d3.transition(xAxisAppend)
+                    var xs=xAxisAppendFocus.transition()
                         .call(xAxis);
                     //xs.merge(xAxisAppend);
                 }
@@ -6816,13 +6820,13 @@ Check equality of 2 array
                     yAxis
                         .tickSizeInner( -availableWidth);
 
-                    var ys=yAxisAppend
+                    var ys=xAxisAppendFocus
                         .call(yAxis);
                     //ys.merge(yAxisAppend);
                 }
 
-                xAxisAppend
-                    .attr('transform', 'translate(0,' + y.range()[0] + ')').merge(gEnter);
+                // xAxisAppend
+                //     .attr('transform', 'translate(0,' + y.range()[0] + ')').merge(gEnter);
                 //gEnter.merge(wrap);
 
                 //============================================================
@@ -6867,13 +6871,13 @@ Check equality of 2 array
                 }
 
 
-                function onBrush(event, shouldDispatch) {
-                    brushExtent = event.selection === null ? null : brush.extent();
-                    var extent = event.selection === null ? x.domain() : brush.extent();
-                    dispatch.call('brush', this, {extent: extent, brush: brush});
+                function onBrush(shouldDispatch) {
+                    brushExtent = brush.extent().length ? brush.extent() : null;
+                    var extent = brush.extent().length ? brush.extent() : x.domain();
+                    dispatch.call('brush', null, {extent: extent, brush: brush});
                     updateBrushBG();
                     if (shouldDispatch) {
-                        dispatch.call('brush', this, extent);
+                        dispatch.call('brush', null, extent);
                     }
                 }
             });
@@ -10120,7 +10124,7 @@ Options for chart:
                 var wrapEnter = wrap.enter().append('g').attr('class', 'nvd3 nv-wrap nv-lineChart');
 
                 var gEnter = wrapEnter.append('g');
-                var g = gEnter.select('g');
+                var g = gEnter;
 
                 var legendWrapAppend=gEnter.append('g').attr('class', 'nv-legendWrap');
                 legendWrapAppend = container.selectAll('g.nv-wrap.nv-lineChart').select('.nv-legendWrap');
@@ -10249,9 +10253,9 @@ Options for chart:
                         .style('display', focusEnable ? 'initial' : 'none')
                         .attr('transform', 'translate(0,' + ( availableHeight + margin.bottom + focus.margin().top) + ')')
                         .call(focus);
-                    //s.merge(gEnter);
+                    // s.merge(gEnter);
                     var extent = focus.brush.extent()=== null ? focus.xDomain() : focus.brush.extent();
-                    if (extent !== null) {
+                    if (extent !== null && extent.length) {
                         onBrush(extent);
                     }
                 }
@@ -10951,14 +10955,14 @@ Options for chart:
 
 
                 function updateBrushBG(event) {
-                    if (!(event.selection === null)) brush.extent(brushExtent);
+                    if (!(event === null)) brush.extent(brushExtent);
                     brushBG
-                        .data([event.selection === null ? x2.domain() : brushExtent])
-                        .each(function(d,i) {
-                            var leftWidth = x2(d[0]) - x2.range()[0],
-                                rightWidth = x2.range()[1] - x2(d[1]);
+                        .data([event === null ? x2.domain() : brushExtent])
+                        .each(function(d, i) {
+                            var leftWidth = x2(d[0]) - x2.range()[0];
+                            var rightWidth = x2.range()[1] - x2(d[1]);
                             d3.select(this).select('.left')
-                                .attr('width',  leftWidth < 0 ? 0 : leftWidth);
+                                .attr('width', leftWidth < 0 ? 0 : leftWidth);
 
                             d3.select(this).select('.right')
                                 .attr('x', x2(d[1]))
@@ -10967,9 +10971,9 @@ Options for chart:
                 }
 
                 function onBrush(event) {
-                    brushExtent = event.selection === null ? null : brush.extent();
-                    extent = event.selection === null ? x2.domain() : brush.extent();
-                    dispatch.call('brush', this, {extent: extent, brush: brush});
+                    brushExtent = event === null ? null : event.selection;
+                    var extent = event === null ? x.domain() : event.selection;
+                    dispatch.call('brush', this, { extent: extent, brush: brush });
                     updateBrushBG(event);
 
                     // Prepare Main (Focus) Bars and Lines
@@ -16764,16 +16768,20 @@ Options for chart:
         chart._calls = new function() {
             this.clearHighlights = function () {
                 nv.dom.write(function() {
-                    container.selectAll(".nv-point.hover").classed("hover", false);
+                    if(container) {
+                        container.selectAll(".nv-point.hover").classed("hover", false);
+                    }
                 });
                 return null;
             };
             this.highlightPoint = function (seriesIndex, pointIndex, isHoverOver) {
                 nv.dom.write(function() {
-                    container.select('.nv-groups')
-                        .selectAll(".nv-series-" + seriesIndex)
-                        .selectAll(".nv-point-" + pointIndex)
-                        .classed("hover", isHoverOver);
+                    if(container) {
+                        container.select('.nv-groups')
+                            .selectAll(".nv-series-" + seriesIndex)
+                            .selectAll(".nv-point-" + pointIndex)
+                            .classed("hover", isHoverOver);
+                    }
                 });
             };
         };
@@ -18360,7 +18368,7 @@ Options for chart:
                         .attr('transform', 'translate(0,' + ( availableHeight + margin.bottom + focus.margin().top) + ')')
                         .datum(data.filter(function(d) { return !d.disabled; }))
                         .call(focus);
-                    var extent = (d3.event==null || d3.event.selection === null) ? focus.xDomain() : focus.brush.extent();
+                    var extent = (d3.event==null || d3.event.selection === null) ? focus.xDomain() : focus.brush.selection();
                     if(extent !== null){
                         onBrush(extent);
                     }
@@ -19233,6 +19241,6 @@ Options for chart:
 
     };
 
-    nv.version = "1.8.9";
+    nv.version = "1.8.10";
 })();
 //# sourceMappingURL=nv.d3.js.map
