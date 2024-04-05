@@ -6825,8 +6825,8 @@ Check equality of 2 array
                     //ys.merge(yAxisAppend);
                 }
 
-                // xAxisAppend
-                //     .attr('transform', 'translate(0,' + y.range()[0] + ')').merge(gEnter);
+                xAxisAppend
+                    .attr('transform', 'translate(0,' + y.range()[0] + ')').merge(gEnter);
                 //gEnter.merge(wrap);
 
                 //============================================================
