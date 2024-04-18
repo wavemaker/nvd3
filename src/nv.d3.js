@@ -6820,12 +6820,12 @@ Check equality of 2 array
                     yAxis
                         .tickSizeInner( -availableWidth);
 
-                    var ys=xAxisAppendFocus
+                    var ys=yAxisAppendFocus
                         .call(yAxis);
                     //ys.merge(yAxisAppend);
                 }
 
-                xAxisAppend
+                xAxisAppendFocus
                     .attr('transform', 'translate(0,' + y.range()[0] + ')').merge(gEnter);
                 //gEnter.merge(wrap);
 
@@ -19241,6 +19241,6 @@ Options for chart:
 
     };
 
-    nv.version = "1.8.10";
+    nv.version = "1.8.11";
 })();
 //# sourceMappingURL=nv.d3.js.map
