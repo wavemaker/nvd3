@@ -1,3 +1,4 @@
+
 /* nvd3 version 1.8.6 (https://github.com/wavemaker/nvd3) 2020-03-14 */
 (function(){
 
@@ -11336,7 +11337,7 @@ Options for chart:
                         //console.log(i+" "+aseries.length);
                         var values = [];
                         aseries.map(function(d, j) {
-                            values.push({x: j, y: d[1]-d[0], y0: d[0], index:j, series: i, seriesIndex: i, display: {y: d[1]-d[0], y0: d[0]}});
+                            values.push({x: (d.data && d.data.x ? d.data.x : j) , y: d[1]-d[0], y0: d[0], index:j, series: i, seriesIndex: i, display: {y: d[1]-d[0], y0: d[0]}});
                             return values;
                         });
                         scatterData.push({key: keys[i], nonStackable: rawData[i].nonStackable, values: values});
@@ -13317,10 +13318,10 @@ Options for chart:
                     }).map(function(x) {return d3.sum(x);})
                 }
 
-                yScale1 .domain(yDomain1 || d3.extent(d3.merge(series1).concat(extraValue1BarStacked), function(d) { return d.y } ))
+                yScale1.domain(yDomain1 || d3.extent(d3.merge(series1).concat(extraValue1BarStacked), function(d) { return d.y } ))
                     .range([0, availableHeight]);
 
-                yScale2 .domain(yDomain2 || d3.extent(d3.merge(series2).concat(extraValue2BarStacked), function(d) { return d.y } ))
+                yScale2.domain(yDomain2 || d3.extent(d3.merge(series2).concat(extraValue2BarStacked), function(d) { return d.y } ))
                     .range([0, availableHeight]);
 
                 lines1.yDomain(yScale1.domain());
