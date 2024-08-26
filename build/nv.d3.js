@@ -11336,7 +11336,7 @@ Options for chart:
                         //console.log(i+" "+aseries.length);
                         var values = [];
                         aseries.map(function(d, j) {
-                            values.push({x: j, y: d[1]-d[0], y0: d[0], index:j, series: i, seriesIndex: i, display: {y: d[1]-d[0], y0: d[0]}});
+                            values.push({x:  (d.data && d.data.x ? d.data.x : j), y: d[1]-d[0], y0: d[0], index:j, series: i, seriesIndex: i, display: {y: d[1]-d[0], y0: d[0]}});
                             return values;
                         });
                         scatterData.push({key: keys[i], nonStackable: rawData[i].nonStackable, values: values});
@@ -19241,6 +19241,6 @@ Options for chart:
 
     };
 
-    nv.version = "1.8.11";
+    nv.version = "1.8.12";
 })();
 //# sourceMappingURL=nv.d3.js.map
