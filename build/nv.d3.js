@@ -15137,7 +15137,7 @@ Options for chart:
                             } else {
                                 switch (labelType) {
                                     case 'key':
-                                        label = getX(d.data).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2');
+                                        label = valueFormat(getX(d.data)).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2');
                                         break;
                                     case 'value':
                                         label = valueFormat(getY(d.data)).replace(/\.0+([A-Za-z]*)$/, '$1').replace(/\.([1-9]+)0+([A-Za-z]*)$/, '.$1$2');;
