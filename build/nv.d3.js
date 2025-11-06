@@ -12337,7 +12337,9 @@ Options for chart:
                         aseries.map(function(d, j) {
                             values.push({label: rawData[i].values[j].label, x: (rawData[i] && rawData[i].values && rawData[i].values[j] && rawData[i].values[j].x)
                                 ? rawData[i].values[j].x
-                                : j, y: d[1]-d[0], y0: d[0], series: i, seriesIndex: i, index: j});
+                                : j, y: d[1]-d[0], y0: d[0], series: i, seriesIndex: i, index: j,
+                                _dataObj: (rawData[i] && rawData[i].values && rawData[i].values[j] && rawData[i].values[j]._dataObj)? rawData[i].values[j]._dataObj: {}
+                            });
                             return values;
                         });
                         scatterData.push({values: values, key: keys[i], seriesIndex: i});
@@ -19243,6 +19245,6 @@ Options for chart:
 
     };
 
-    nv.version = "1.8.15";
+    nv.version = "1.8.16";
 })();
 //# sourceMappingURL=nv.d3.js.map
